@@ -30,7 +30,11 @@ const corsOptions = {
 
 const app = express();
 
-app.use(cors(allowedOrigins));
+app.use(cors({
+  origin: 'https://stripe-form-frontend.vercel.app', // Allow only this frontend domain
+  methods: ['POST'], // Specify allowed methods (GET, POST, etc.)
+  credentials: true // If you need to include credentials
+}));
 app.use(express.json());
 
 // app.use(cors((req, callback) => {
