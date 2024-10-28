@@ -8,7 +8,7 @@ dotenv.config()
 
 // Middleware
 const allowedOrigins = [
-    'https://stripe-frontend-blush.vercel.app',
+    'https://stripe-form-frontend.vercel.app',
     'http://localhost:5173',
 ];
 
@@ -30,7 +30,7 @@ const corsOptions = {
 
 const app = express();
 
-app.use(cors(corsOptions));
+app.use(cors(allowedOrigins));
 app.use(express.json());
 
 // app.use(cors((req, callback) => {
