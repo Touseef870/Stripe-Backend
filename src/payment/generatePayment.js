@@ -6,8 +6,8 @@ import PaymentSession from '../models/paymentSessions.js';
 export default async function generatePayment(req, res) {
     const { title, description, amount, image, clientName, clientNum, clientEmail } = req.body;
 
-    if (!title || !description || !amount || !image || !clientName || !clientNum || !clientEmail) {
-        res.status(400).json({
+    if (title === "" || description === "" || amount === "" || image === "" || clientName === "" || clientEmail === "") {
+        return res.status(400).json({
             success: false,
             message: 'All fields are required'
         })
