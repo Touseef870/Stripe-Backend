@@ -51,20 +51,20 @@ for (const field of requiredFields) {
         }
 
 
-        const sentEmail = await sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description, sessionId: savedSession._doc.sessionId, logo: image })
-            .then(() => {
-                console.log("Email sent successfully");
-            })
-            .catch((error) => {
-                console.error("Error sending email:", error.message);
-                res.status(500).json({ success: false, message: "Failed to send email" });
-            });
+        // const sentEmail = await sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description, sessionId: savedSession._doc.sessionId, logo: image })
+        //     .then(() => {
+        //         console.log("Email sent successfully");
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error sending email:", error.message);
+        //         res.status(500).json({ success: false, message: "Failed to send email" });
+        //     });
 
         let response = {}
 
         response.emailSent = true;
         response.data = savedSession;
-        response.emailgaya = sentEmail?.message || "Ruko ajayega";
+        // response.emailgaya = sentEmail?.message || "Ruko ajayega";
 
         return res.status(200).json({ success: true, status: 200, data: response });
 
