@@ -6,13 +6,16 @@ import routes from './src/routes/index.js';
 
 dotenv.config()
 
+
+
 // Middleware
 const allowedOrigins = [
     'https://stripe-form-frontend.vercel.app',
     'http://localhost:5173',
 ];
 
-// it allow to all origin what to get call.
+
+// CORS Policy defined
 const corsOptions = {
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"],
@@ -22,21 +25,25 @@ const corsOptions = {
         "X-Requested-With",
         "Accept",
         "Origin",
+        "Access-Control-Allow-Headers",
+        "Access-Control-Allow-Origin",
+    ],
+    exposedHeaders: [
+        "Authorization",
     ],
     credentials: false,
     preflightContinue: false,
     optionsSuccessStatus: 204,
 };
 
+
 const app = express();
-
-app.use(cors({
-  origin: '*', // Allow all origins temporarily
-  methods: ['POST'],
-  credentials: true
-}));
-
+app.use(cors(corsOptions));
 app.use(express.json());
+
+
+
+
 
 // app.use(cors((req, callback) => {
 //     const origin = req.header('Origin');
