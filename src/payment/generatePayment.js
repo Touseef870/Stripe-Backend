@@ -140,7 +140,7 @@ export default async function generatePayment(req, res) {
             }
         })();
 
-        return res.status(200).json({ success: true, status: 200, data: { emailSent: true, session: savedSession } });
+        return res.status(200).json({ success: true, status: 200, ...{ emailSent: true, session: savedSession } });
 
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
