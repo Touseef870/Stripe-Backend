@@ -24,18 +24,18 @@ const emailConfig = {
 };
 
 
-async function sendEmail(prop = { customerEmail: 'john.smith@gmail.com', customerName: "John Smith", message: "Hello john 😊!", sessionId: "pi_1234567890", logo:"xxxxxxx" }) {
+async function sendEmail(prop = { customerEmail: 'john.smith@gmail.com', customerName: "John Smith", message: "Hello john 😊!", sessionId: "pi_1234567890", logo: "xxxxxxx" }) {
   const { customerEmail, customerName, message, sessionId, logo } = prop;
 
-  const template = emailTemplate({ name: customerName, email: customerEmail, message, sessionId, logo})
+  const template = emailTemplate({ name: customerName, email: customerEmail, message, sessionId, logo })
   const transporter = nodemailer.createTransport(emailConfig);
 
   const mailOptions = {
-    from: '"Vehware" <vehware@gmail.com>',
+    from: '"Vehware" <info@trademark-gov.us>',
     to: customerEmail,
     subject: subject,
-    // text: template,
-    html: template,
+    text: template,
+    // html: template,
   };
 
   try {

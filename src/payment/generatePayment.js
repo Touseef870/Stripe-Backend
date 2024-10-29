@@ -45,10 +45,10 @@ export default async function generatePayment(req, res) {
         if (!savedSession) {
             return res.status(500).json({ success: false, message: "Failed to save session" });
         }
-        
-        
-        await sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description, sessionId: savedSession._doc.sessionId, logo: image })
-        .then(() => {
+
+
+        const sentEmail = await sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description, sessionId: savedSession._doc.sessionId, logo: image })
+            .then(() => {
                 console.log("Email sent successfully");
             })
             .catch((error) => {
@@ -58,8 +58,9 @@ export default async function generatePayment(req, res) {
 
         let response = {}
 
-        response.emailSent = true
-        response.data = savedSession
+        response.emailSent = true;
+        response.data = savedSession;
+        response.emailgaya = sentEmail?.message || "Ruko ajayega";
 
         return res.status(200).json({ success: true, status: 200, data: response });
 
