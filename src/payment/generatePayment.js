@@ -6,12 +6,16 @@ import PaymentSession from '../models/paymentSessions.js';
 export default async function generatePayment(req, res) {
     const { title, description, amount, image, clientName, clientNum, clientEmail } = req.body;
 
-    if (title === "" || description === "" || amount === "" || image === "" || clientName === "" || clientEmail === "") {
-        return res.status(400).json({
-            success: false,
-            message: 'All fields are required'
-        })
-    }
+  const requiredFields = ['title', 'description', 'amount', 'image', 'clientName', 'clientEmail'];
+
+for (const field of requiredFields) {
+  if (!req.body[field]) {
+    return res.status(400).json({
+      success: false,
+      message: `Field '${field}' is required`
+    });
+  }
+}
 
     try {
         const customer = await stripe.customers.create({
