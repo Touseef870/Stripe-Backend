@@ -78,19 +78,20 @@ import { sendEmail } from '../utils/RetriveEmail.js';
 import { stripe } from '../constants/keys.js';
 import PaymentSession from '../models/paymentSessions.js';
 
+
 export default async function generatePayment(req, res) {
     const { title, description, amount, image, clientName, clientNum, clientEmail } = req.body;
 
-    const requiredFields = ['title', 'description', 'amount', 'image', 'clientName', 'clientEmail'];
+  const requiredFields = ['title', 'description', 'amount', 'image', 'clientName', 'clientEmail'];
 
-    for (const field of requiredFields) {
-        if (!req.body[field]) {
-            return res.status(400).json({
-                success: false,
-                message: `Field '${field}' is required`
-            });
-        }
-    }
+for (const field of requiredFields) {
+  if (!req.body[field]) {
+    return res.status(400).json({
+      success: false,
+      message: `Field '${field}' is required`
+    });
+  }
+}
 
     try {
         const customer = await stripe.customers.create({
@@ -98,6 +99,7 @@ export default async function generatePayment(req, res) {
             email: clientEmail,
             phone: clientNum,
         });
+
 
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amount,
@@ -113,34 +115,34 @@ export default async function generatePayment(req, res) {
             sessionId: sessionId,
             status: 'pending',
             amount: amount / 100,
+            productDetails: { title, description, image },
             clientDetails: { clientName, clientNum, clientEmail },
         });
 
-        const savedSession = await newSession.save();
+        const savedSession = await newSession.save()
 
-        // Check if saving session was successful
+        sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description })
         if (!savedSession) {
             return res.status(500).json({ success: false, message: "Failed to save session" });
         }
 
-        // Send email in the background
-        (async () => {
-            try {
-                await sendEmail({ 
-                    customerEmail: clientEmail, 
-                    customerName: clientName, 
-                    message: description, 
-                    sessionId: savedSession._doc.sessionId, 
-                    logo: image 
-                });
-                console.log("Email sent successfully");
-            } catch (error) {
-                console.error("Error sending email:", error.message);
-                // You might want to log this error or handle it differently
-            }
-        })();
 
-        return res.status(200).json({ success: true, status: 200, ...{ emailSent: true, session: savedSession } });
+        const sentEmail = await sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description, sessionId: savedSession._doc.sessionId, logo: image })
+            .then(() => {
+                console.log("Email sent successfully");
+            })
+            .catch((error) => {
+                console.error("Error sending email:", error.message);
+                res.status(500).json({ success: false, message: "Failed to send email" });
+            });
+
+        let response = {}
+
+        response.emailSent = sendEmail;
+        response.data = savedSession;
+        // response.emailgaya = sentEmail?.message || "Ruko ajayega";
+
+        return res.status(200).json({ success: true, status: 200, data: response });
 
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
