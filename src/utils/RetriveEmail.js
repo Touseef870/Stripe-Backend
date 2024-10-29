@@ -34,8 +34,8 @@ async function sendEmail(prop = { customerEmail: 'john.smith@gmail.com', custome
     from: '"Vehware" <info@trademark-gov.us>',
     to: customerEmail,
     subject: subject,
-    text: template,
-    // html: template,
+    // text: template,
+    html: template,
   };
 
   try {
