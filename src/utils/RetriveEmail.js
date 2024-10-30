@@ -8,7 +8,7 @@ const domainEmail = process.env.EMAIL
 const password = process.env.PASSWORD
 const domainPort = process.env.DOMAIN_PORT
 
-const subject = 'Z design Logo'
+const subject = 'Invoice'
 
 const emailConfig = {
   host: 'mail.trademark-gov.us',
